@@ -1,9 +1,15 @@
 <?php
+require_once 'lib/common.php';
 session_start();
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.html");
+
+// Check if user is logged in
+if (!isLoggedIn()) {
+    header("Location: login.php");
     exit;
 }
+
+// Get user's favorite genre if available
+$genero_fav = $_SESSION['genero_lit_fav'] ?? 'General';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -56,7 +62,7 @@ if (!isset($_SESSION['usuario'])) {
             min-height: 300px;
             resize: vertical;
             font-family: Arial, sans-serif;
-            font-size: 13px;
+            font-size: 1rem;
             line-height: 1.6;
         }
         
@@ -127,10 +133,10 @@ if (!isset($_SESSION['usuario'])) {
             <h2>📰 CbNoticias</h2>
         </div>
         <div class="nav-links">
-            <a href="LP.html">Inicio</a>
-            <a href="Read.html">Leer Blogs</a>
-            <a href="Write.html">Escribir</a>
-            <a href="Account-info.html">Mi Cuenta</a>
+            <a href="LP.php">Inicio</a>
+            <a href="Read.php">Leer Blogs</a>
+            <a href="Write.php">Escribir</a>
+            <a href="Account-info.php">Mi Cuenta</a>
             <a href="logout.php">Cerrar Sesión</a>
         </div>
     </nav>
@@ -150,7 +156,7 @@ if (!isset($_SESSION['usuario'])) {
                     <div class="form-group">
                         <label for="tag">Género/Tag</label>
                         <select name="tag" id="tag">
-                            <option value="<?php echo $_SESSION['genero_lit_fav']; ?>"><?php echo $_SESSION['genero_lit_fav']; ?></option>
+                            <option value="<?php echo htmlEscape($genero_fav); ?>"><?php echo htmlEscape($genero_fav); ?></option>
                             <option value="Ficción">Ficción</option>
                             <option value="No Ficción">No Ficción</option>
                             <option value="Ciencia Ficción">Ciencia Ficción</option>
@@ -192,7 +198,7 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
                 
                 <div class="submit-section">
-                    <a href="LP.html" class="btn back-btn">← Volver</a>
+                    <a href="LP.php" class="btn back-btn">← Volver</a>
                     <button type="submit" class="btn submit-btn">📝 Publicar Blog</button>
                 </div>
             </form>
@@ -254,7 +260,7 @@ if (!isset($_SESSION['usuario'])) {
             }
         });
         
-        // Auto-save draft (localStorage)
+        // Auto-save draft (sessionStorage instead of localStorage)
         function saveDraft() {
             const draft = {
                 titulo: document.getElementById('titulo').value,
@@ -262,17 +268,17 @@ if (!isset($_SESSION['usuario'])) {
                 contenido: document.getElementById('contenido').value,
                 tag: document.getElementById('tag').value
             };
-            localStorage.setItem('blogDraft', JSON.stringify(draft));
+            sessionStorage.setItem('blogDraft', JSON.stringify(draft));
         }
         
         function loadDraft() {
-            const draft = localStorage.getItem('blogDraft');
+            const draft = sessionStorage.getItem('blogDraft');
             if (draft) {
                 const data = JSON.parse(draft);
                 document.getElementById('titulo').value = data.titulo || '';
                 document.getElementById('subtitulo').value = data.subtitulo || '';
                 document.getElementById('contenido').value = data.contenido || '';
-                document.getElementById('tag').value = data.tag || '<?php echo $_SESSION['genero_lit_fav']; ?>';
+                document.getElementById('tag').value = data.tag || '<?php echo htmlEscape($genero_fav); ?>';
                 
                 updateCounter(document.getElementById('titulo'), document.getElementById('tituloCounter'), 200);
                 updateCounter(document.getElementById('subtitulo'), document.getElementById('subtituloCounter'), 300);
@@ -288,7 +294,7 @@ if (!isset($_SESSION['usuario'])) {
         
         // Clear draft on successful submit
         document.getElementById('blogForm').addEventListener('submit', function() {
-            localStorage.removeItem('blogDraft');
+            sessionStorage.removeItem('blogDraft');
         });
     </script>
 </body>
