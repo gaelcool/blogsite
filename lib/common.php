@@ -12,11 +12,20 @@ function getDsn(){
     return 'sqlite:' . getDatabasePath();
 }
 
-function getPDO(){
+function getPDO()
+{
     $pdo = new PDO(getDsn());
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Foreign key constraints need to be enabled manually in SQLite
+    $result = $pdo->query('PRAGMA foreign_keys = ON');
+    if ($result === false)
+    {
+        throw new Exception('Could not turn on foreign key constraints');
+    }
+
     return $pdo;
 }
+
 
 function htmlEscape($html)
 {
@@ -61,7 +70,7 @@ function tryLogin(PDO $pdo, $usuario, $clave)
     
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    // Direct password comparison (not hashed in your init.sql)
+    // Direct password comparison (plain text - no hashing)
     if ($user && $user['clave'] === $clave) {
         return $user;
     }
@@ -80,15 +89,14 @@ function login($usuario, $nombre, $genero_lit = null)
     $_SESSION['genero_lit_fav'] = $genero_lit;
     $_SESSION['logged_in'] = true;
 }
-
 /**
  * Check if user is logged in
  */
+
 function isLoggedIn()
 {
-    return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
+    return isset($_SESSION['logged_in_username']);
 }
-
 /**
  * Require login - redirect if not logged in
  */

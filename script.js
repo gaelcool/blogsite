@@ -151,11 +151,11 @@ const isValid = patterns[fieldId].test(value);
     // Validate all text fields one more time
     let allValid = true;
     
-    // textFields.forEach(fieldId => {
-    //   if (!validateField(fieldId) && fieldId !== 'telefono') {
-    //     allValid = false;
-    //   }
-    // });
+    textFields.forEach(fieldId => {
+      if (!validateField(fieldId) && fieldId !== 'telefono') {
+        allValid = false;
+      }
+    });
     
     if (!allValid) {
       e.preventDefault();

@@ -1,4 +1,5 @@
--- Drop old tables if they exist
+PRAGMA foreign_keys = ON;
+
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS user;

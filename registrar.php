@@ -30,18 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "El correo ya está registrado.";
         }
         else {
-            $stmt = $pdo->prepare("
-                INSERT INTO user (usuario, nombre, email, clave, genero_lit_fav) 
-                VALUES (:usuario, :nombre, :email, :clave, :genero_lit_fav)
-            ");
-            
-            $result = $stmt->execute([
-                ':usuario' => $usuario,
-                ':nombre' => $nombre,
-                ':email' => $email,
-                ':clave' => $clave, // Plain text to match tryLogin()
-                ':genero_lit_fav' => $genero_lit_fav
-            ]); 
+          $stmt = $pdo->prepare("
+        INSERT INTO user (usuario, nombre, email, clave, fecha_registro, grade, genero_lit_fav) 
+        VALUES (:usuario, :nombre, :email, :clave, CURRENT_TIMESTAMP, :grade, :genero_lit_fav)
+          ");
+
+          $result = $stmt->execute([
+            ':usuario' => $usuario,
+            ':nombre' => $nombre,
+            ':email' => $email,
+            ':clave' => password_hash($clave, PASSWORD_DEFAULT), // FIX: Hash password
+            ':grade' => 0, // Provide default value for grade
+            ':genero_lit_fav' => $genero_lit_fav
+        ]);
             
             if ($result) {
                 $success = true;

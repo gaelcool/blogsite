@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         if ($userData)
         {
             // Login successful
-            login($userData['usuario'], $userData['nombre'], $userData['genero_lit']);
+            login($userData['usuario'], $userData['nombre'], $userData['genero_lit_fav']);
             
             header('Location: LP.php');
             exit();
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
       <input type="text" name="usuario" placeholder="Usuario" required 
              value="<?php echo isset($usuario) ? htmlEscape($usuario) : ''; ?>">
       <input type="password" name="clave" placeholder="Contraseña" required>
-      <button type="submit">Entrar</button>
+      <button type="submit" id="submitBtn">Entrar</button>
       <p>¿No tienes cuenta? <a href="registrar.php">Regístrate</a></p>
       <p><a href="install.php">Instalar base de datos</a></p>
     </form>
