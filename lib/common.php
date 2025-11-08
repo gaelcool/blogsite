@@ -99,16 +99,23 @@ function requireLogin() {
     }
 }
 
+function fetchgenerolitfav(PDO $pdo, $usuario)
+{
+    $stmt = $pdo->prepare("SELECT genero_lit FROM user WHERE usuario = :usuario");
+    $stmt->execute([':usuario' => $usuario]);
+    return $stmt->fetchColumn();
+}
+
 function userExists(PDO $pdo, $usuario)
 {
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE usuario = :usuario");
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE usuario = :usuario");
     $stmt->execute([':usuario' => $usuario]);
     return $stmt->fetchColumn() > 0;
 }
 
 function emailExists(PDO $pdo, $correo)
 {
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE correo = :correo");
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE correo = :correo");
     $stmt->execute([':correo' => $correo]);
     return $stmt->fetchColumn() > 0;
 }
@@ -129,6 +136,25 @@ function getCurrentUser()
 {
     return isset($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
 }
+
+function fetchAllusuarios() {
+    $pdo = getPDO();
+
+    // Prepare and execute the query
+    $stmt = $pdo->prepare('
+        SELECT usuario, nombre, email, genero_lit
+        FROM user
+        ORDER BY usuario ASC
+    ');
+
+    if (!$stmt->execute()) {
+        throw new Exception('Failed to fetch users from database');
+    }
+
+    // Return same kind of data that mysqli_stmt_get_result() provided
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 /**
  * Fetch all posts from database

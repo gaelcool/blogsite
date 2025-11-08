@@ -1,27 +1,29 @@
 <?php
-require_once 'lib/common.php';
+require_once'lib/common.php';
 session_start();
 requireLogin();
-
-// Fetch all posts from database
 $blogs = fetchAllPosts();
+fetchAllComments();
+$resultado = fetchAllusuarios();
 
-// Calculate word count and reading time for each blog
-foreach ($blogs as &$blog) {
-    $wordCount = str_word_count(strip_tags($blog['content']));
-    $blog['palabra_count'] = $wordCount;
-    $blog['tiempo_lectura'] = max(1, ceil($wordCount / 200)); // Assuming 200 words per minute
-    
-    // Map database columns to expected names
-    $blog['titulo'] = $blog['title'];
-    $blog['subtitulo'] = $blog['subtitle'];
-    $blog['contenido'] = $blog['content'];
-    $blog['autor'] = $blog['author_name'];
-    $blog['fecha_creacion'] = $blog['created_at'];
-    $blog['id'] = md5($blog['title'] . $blog['created_at']); // Generate unique ID
-}
-unset($blog); // Break reference
+$error = '';
 
+
+// if (!isset($_SESSION['usuario'])) {
+//     header("Location: login.html");
+//     exit;
+// }
+
+
+
+// Obtener todos los blogs con información del usuario
+// $stmt = mysqli_prepare($conexion, "SELECT b.*, u.usuario as autor FROM blogs b JOIN usuarios u ON b.usuario_id = u.id ORDER BY b.fecha_creacion DESC");
+// mysqli_stmt_execute($stmt);
+// $resultado = mysqli_stmt_get_result($stmt);
+// $blogs = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
+
+// mysqli_stmt_close($stmt);
+// mysqli_close($conexion);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -43,28 +45,29 @@ unset($blog); // Break reference
         }
         
         .page-header h1 {
-            color: var(--accent, #FF6B9D);
+            color: var(--accent);
             font-size: 2.5rem;
             margin-bottom: 1rem;
         }
         
         .page-header p {
-            color: var(--text, #333);
+            color: var(--text);
             font-size: 1.2rem;
         }
         
         .blog-card {
-            background: var(--white, #fff);
+            background: var(--white);
             border-radius: 12px;
             padding: 1.5rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px var(--shadow);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .blog-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 25px var(--shadow);
         }
         
         .blog-header {
@@ -77,13 +80,13 @@ unset($blog); // Break reference
         .blog-title {
             font-size: 1.5rem;
             font-weight: bold;
-            color: var(--text, #333);
+            color: var(--text);
             margin-bottom: 0.5rem;
         }
         
         .blog-subtitle {
             font-size: 1rem;
-            color: var(--text, #666);
+            color: var(--text);
             opacity: 0.8;
             margin-bottom: 1rem;
         }
@@ -93,46 +96,43 @@ unset($blog); // Break reference
             gap: 1rem;
             align-items: center;
             margin-bottom: 1rem;
-            flex-wrap: wrap;
         }
         
         .blog-author {
-            color: var(--accent, #FF6B9D);
+            color: var(--accent);
             font-weight: 500;
         }
         
         .blog-date {
-            color: var(--text, #666);
+            color: var(--text);
             opacity: 0.7;
             font-size: 0.9rem;
         }
         
         .blog-tag {
-            background: var(--primary, #4A90E2);
-            color: var(--white, #fff);
-            padding: 4px 12px;
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 8px;
             border-radius: 12px;
             font-size: 0.8rem;
-            white-space: nowrap;
         }
         
         .blog-stats {
             display: flex;
             gap: 1rem;
             margin-bottom: 1rem;
-            flex-wrap: wrap;
         }
         
         .stat-badge {
-            background: var(--background, #f5f5f5);
+            background: var(--background);
             padding: 4px 8px;
             border-radius: 6px;
             font-size: 0.8rem;
-            color: var(--text, #333);
+            color: var(--text);
         }
         
         .blog-preview {
-            color: var(--text, #333);
+            color: var(--text);
             line-height: 1.6;
             margin-bottom: 1rem;
         }
@@ -141,9 +141,7 @@ unset($blog); // Break reference
             display: none;
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 1px solid var(--secondary, #ddd);
-            line-height: 1.8;
-            color: var(--text, #333);
+            border-top: 1px solid var(--secondary);
         }
         
         .blog-content.show {
@@ -151,14 +149,13 @@ unset($blog); // Break reference
         }
         
         .expand-btn {
-            background: var(--accent, #FF6B9D);
-            color: var(--white, #fff);
+            background: var(--accent);
+            color: var(--white);
             border: none;
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
         }
         
         .expand-btn:hover {
@@ -168,7 +165,7 @@ unset($blog); // Break reference
         .no-blogs {
             text-align: center;
             padding: 3rem;
-            color: var(--text, #666);
+            color: var(--text);
             opacity: 0.7;
         }
         
@@ -178,11 +175,11 @@ unset($blog); // Break reference
         }
         
         .filter-section {
-            background: var(--white, #fff);
+            background: var(--white);
             border-radius: 12px;
             padding: 1.5rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px var(--shadow);
         }
         
         .filter-row {
@@ -192,31 +189,16 @@ unset($blog); // Break reference
             flex-wrap: wrap;
         }
         
-        .filter-select, .search-input {
+        .filter-select {
             padding: 8px 12px;
-            border: 2px solid var(--secondary, #ddd);
+            border: 2px solid var(--secondary);
             border-radius: 6px;
-            background: var(--white, #fff);
-            font-size: 0.9rem;
+            background: var(--white);
         }
         
         .search-input {
             flex: 1;
             min-width: 200px;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: var(--accent, #FF6B9D);
-            color: var(--white, #fff);
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            background: #E55A9B;
         }
     </style>
 </head>
@@ -226,10 +208,10 @@ unset($blog); // Break reference
             <h2>📰 CbNoticias</h2>
         </div>
         <div class="nav-links">
-            <a href="LP.php">Inicio</a>
-            <a href="Read.php">Leer Blogs</a>
-            <a href="Write.php">Escribir</a>
-            <a href="Account-info.php">Mi Cuenta</a>
+            <a href="LP.html">Inicio</a>
+            <a href="Read.html">Leer Blogs</a>
+            <a href="Write.html">Escribir</a>
+            <a href="Account-info.html">Mi Cuenta</a>
             <a href="logout.php">Cerrar Sesión</a>
         </div>
     </nav>
@@ -268,26 +250,26 @@ unset($blog); // Break reference
         <div id="blogsContainer">
             <?php if (empty($blogs)): ?>
                 <div class="no-blogs">
-                    <h3>🔍 No hay blogs aún</h3>
+                    <h3>📝 No hay blogs aún</h3>
                     <p>¡Sé el primero en escribir un blog!</p>
-                    <a href="Write.php" class="btn" style="margin-top: 1rem;">Escribir Blog</a>
+                    <a href="Write.html" class="btn" style="margin-top: 1rem;">Escribir Blog</a>
                 </div>
             <?php else: ?>
                 <?php foreach ($blogs as $blog): ?>
-                    <div class="blog-card" data-tag="<?php echo htmlEscape($blog['tag']); ?>" data-author="<?php echo htmlEscape($blog['autor']); ?>" data-date="<?php echo htmlEscape($blog['fecha_creacion']); ?>" data-words="<?php echo $blog['palabra_count']; ?>">
+                    <div class="blog-card" data-tag="<?php echo htmlspecialchars($blog['tag']); ?>" data-author="<?php echo htmlspecialchars($blog['autor']); ?>">
                         <div class="blog-header">
-                            <div style="flex: 1;">
-                                <h3 class="blog-title"><?php echo htmlEscape($blog['titulo']); ?></h3>
+                            <div>
+                                <h3 class="blog-title"><?php echo htmlspecialchars($blog['titulo']); ?></h3>
                                 <?php if (!empty($blog['subtitulo'])): ?>
-                                    <p class="blog-subtitle"><?php echo htmlEscape($blog['subtitulo']); ?></p>
+                                    <p class="blog-subtitle"><?php echo htmlspecialchars($blog['subtitulo']); ?></p>
                                 <?php endif; ?>
                             </div>
-                            <span class="blog-tag"><?php echo htmlEscape($blog['tag']); ?></span>
+                            <span class="blog-tag"><?php echo htmlspecialchars($blog['tag']); ?></span>
                         </div>
                         
                         <div class="blog-meta">
-                            <span class="blog-author">👤 <?php echo htmlEscape($blog['autor']); ?></span>
-                            <span class="blog-date">📅 <?php echo convertSqlDate($blog['fecha_creacion']); ?></span>
+                            <span class="blog-author">👤 <?php echo htmlspecialchars($blog['autor']); ?></span>
+                            <span class="blog-date">📅 <?php echo date('d/m/Y', strtotime($blog['fecha_creacion'])); ?></span>
                         </div>
                         
                         <div class="blog-stats">
@@ -301,16 +283,16 @@ unset($blog); // Break reference
                             if (strlen($blog['contenido']) > 200) {
                                 $preview .= '...';
                             }
-                            echo nl2br(htmlEscape($preview));
+                            echo nl2br(htmlspecialchars($preview));
                             ?>
                         </div>
                         
-                        <div class="blog-content" id="content-<?php echo htmlEscape($blog['id']); ?>">
-                            <?php echo nl2br(htmlEscape($blog['contenido'])); ?>
+                        <div class="blog-content" id="content-<?php echo $blog['id']; ?>">
+                            <?php echo nl2br(htmlspecialchars($blog['contenido'])); ?>
                         </div>
                         
-                        <button class="expand-btn" onclick="toggleContent('<?php echo htmlEscape($blog['id']); ?>')">
-                            <span id="btn-text-<?php echo htmlEscape($blog['id']); ?>">Leer más</span>
+                        <button class="expand-btn" onclick="toggleContent(<?php echo $blog['id']; ?>)">
+                            <span id="btn-text-<?php echo $blog['id']; ?>">Leer más</span>
                         </button>
                     </div>
                 <?php endforeach; ?>
@@ -337,19 +319,19 @@ unset($blog); // Break reference
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const tagFilter = document.getElementById('tagFilter').value;
             const sortFilter = document.getElementById('sortFilter').value;
-            const blogCards = Array.from(document.querySelectorAll('.blog-card'));
+            const blogCards = document.querySelectorAll('.blog-card');
             
             let visibleBlogs = [];
             
             blogCards.forEach(card => {
                 const title = card.querySelector('.blog-title').textContent.toLowerCase();
-                const preview = card.querySelector('.blog-preview').textContent.toLowerCase();
+                const content = card.querySelector('.blog-preview').textContent.toLowerCase();
                 const tag = card.getAttribute('data-tag');
                 const author = card.getAttribute('data-author').toLowerCase();
                 
                 const matchesSearch = searchTerm === '' || 
                     title.includes(searchTerm) || 
-                    preview.includes(searchTerm) ||
+                    content.includes(searchTerm) ||
                     author.includes(searchTerm);
                 
                 const matchesTag = tagFilter === '' || tag === tagFilter;
@@ -365,26 +347,26 @@ unset($blog); // Break reference
             // Sort blogs
             if (sortFilter === 'newest') {
                 visibleBlogs.sort((a, b) => {
-                    const dateA = new Date(a.getAttribute('data-date'));
-                    const dateB = new Date(b.getAttribute('data-date'));
+                    const dateA = new Date(a.querySelector('.blog-date').textContent.split('📅 ')[1].split('/').reverse().join('-'));
+                    const dateB = new Date(b.querySelector('.blog-date').textContent.split('📅 ')[1].split('/').reverse().join('-'));
                     return dateB - dateA;
                 });
             } else if (sortFilter === 'oldest') {
                 visibleBlogs.sort((a, b) => {
-                    const dateA = new Date(a.getAttribute('data-date'));
-                    const dateB = new Date(b.getAttribute('data-date'));
+                    const dateA = new Date(a.querySelector('.blog-date').textContent.split('📅 ')[1].split('/').reverse().join('-'));
+                    const dateB = new Date(b.querySelector('.blog-date').textContent.split('📅 ')[1].split('/').reverse().join('-'));
                     return dateA - dateB;
                 });
             } else if (sortFilter === 'longest') {
                 visibleBlogs.sort((a, b) => {
-                    const wordsA = parseInt(a.getAttribute('data-words'));
-                    const wordsB = parseInt(b.getAttribute('data-words'));
+                    const wordsA = parseInt(a.querySelector('.stat-badge').textContent.split('📊 ')[1].split(' ')[0]);
+                    const wordsB = parseInt(b.querySelector('.stat-badge').textContent.split('📊 ')[1].split(' ')[0]);
                     return wordsB - wordsA;
                 });
             } else if (sortFilter === 'shortest') {
                 visibleBlogs.sort((a, b) => {
-                    const wordsA = parseInt(a.getAttribute('data-words'));
-                    const wordsB = parseInt(b.getAttribute('data-words'));
+                    const wordsA = parseInt(a.querySelector('.stat-badge').textContent.split('📊 ')[1].split(' ')[0]);
+                    const wordsB = parseInt(b.querySelector('.stat-badge').textContent.split('📊 ')[1].split(' ')[0]);
                     return wordsA - wordsB;
                 });
             }

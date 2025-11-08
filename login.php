@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 </head>
 <body>
   <div class="container">
-    <form action="login.php" method="POST" class="form">
+    <form action="login.php" method="POST" class="form" id="loginForm">
       <h2>Iniciar Sesión</h2>
       
       <?php if ($error): ?>
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
              value="<?php echo isset($usuario) ? htmlEscape($usuario) : ''; ?>">
       <input type="password" name="clave" placeholder="Contraseña" required>
       <button type="submit">Entrar</button>
-      <p>¿No tienes cuenta? <a href="register.html">Regístrate</a></p>
+      <p>¿No tienes cuenta? <a href="registrar.php">Regístrate</a></p>
       <p><a href="install.php">Instalar base de datos</a></p>
     </form>
   </div>

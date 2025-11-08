@@ -35,8 +35,8 @@ if (!isset($_SESSION['usuario'])) {
         <div class="welcome-section">
             <div class="user-info">
                 <h3>¡Bienvenido, 
-                    <?php echo $_SESSION['nombre'];
-                     ?> 
+                    <?php echo $_SESSION['nombre'] ;
+                     ?>!
                 </h3>
                 <p>Género favorito: <?php echo $_SESSION['genero_lit_fav']; ?></p>
             </div>
@@ -51,7 +51,7 @@ if (!isset($_SESSION['usuario'])) {
                 <p class="section-description">
                     Crea y publica tus propios artículos. Comparte tus ideas, experiencias y conocimientos con la comunidad.
                 </p>
-                <a href="Write.html" class="section-btn btn">Comenzar a Escribir</a>
+                <a href="Write.php" class="section-btn btn">Comenzar a Escribir</a>
             </div>
 
             <div class="section-card">
@@ -60,7 +60,7 @@ if (!isset($_SESSION['usuario'])) {
                 <p class="section-description">
                     Descubre artículos fascinantes de otros usuarios. Explora diferentes temas y géneros literarios.
                 </p>
-                <a href="Read.html" class="section-btn btn">Explorar Blogs</a>
+                <a href="Read.php" class="section-btn btn">Explorar Blogs</a>
             </div>
         </div>
     </div>

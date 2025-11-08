@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Get  elements
   const form = document.getElementById('registerForm');
   const submitBtn = document.getElementById('submitBtn');
-  const fields = ['nombre', 'correo', 'usuario', 'clave', 'telefono', 'genero_lit'];
+  const fields = ['nombre', 'correo', 'usuario', 'clave', 'telefono'];
 
 
   function updateSubmitButton() {
