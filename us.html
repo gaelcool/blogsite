@@ -10,23 +10,23 @@
 <body>
     <div class="wrapper">
         <header>
-            <div class="logo">
-                <h1>CbNoticias</h1>
-            </div>
-            <nav>
-                <a href="index.html">Inicio</a>
-                <a href="us.html" class="active">Sobre Nosotros</a>
-                <a href="register.php">Registro</a>
-            </nav>
-            <form action="login.php" method="POST" class="form" id="loginForm">
-            <div class="login">
-                  <input type="text" name="usuario" placeholder="Usuario" >
-            
-      <input type="password" name="clave" placeholder="Contraseña" >
-      <button type="submit" id="submitBtn">Entrar</button>
-            </div>
-            </form>
-        </header>
+  <div class="logo">
+    <h1>CbNoticias</h1>
+  </div>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="us.html" class="active">Sobre Nosotros</a>
+    <a href="register.php">Registro</a>
+  </nav>
+
+  <form action="login.php" method="POST" class="login-form">
+    <input type="text" name="user" placeholder="Usuario">
+    <input type="password" name="clave" placeholder="Contraseña">
+    <button type="submit" id="submitBtn">Entrar a tu plaza</button>
+  </form>
+</header>
+
 
         <main class="container">
             <section class="intro">
@@ -37,7 +37,7 @@
             <section class="location">
                 <h3>Nuestra Ubicación:</h3>
                 <div class="map-container">
-                    <img src="zoo-map.jpg" alt="Mapa de Zoolandia">
+               
                 </div>
                 <p class="address">
                     <strong>Dirección:</strong> Av. Principal 123, Tlaxcala, Mexico<br>
