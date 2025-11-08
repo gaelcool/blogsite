@@ -1,0 +1,270 @@
+
+body.read-page {
+background: url("assets/schoolFront.jpg") no-repeat center center fixed;
+background-size: cover;  
+}
+
+
+.read-page .nav {
+  background: rgb(177, 77, 188);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+} 
+.read-page .nav-brand {
+margin: 0;
+cursor: crosshair;
+}
+
+.read-page .nav-brand h1 {
+  color: rgb(0, 0, 0);
+  font-size: larger;
+}
+
+.read-page .nav-links {
+  display: flex;
+  gap: 2.5rem;
+  background: transparent;
+  margin-left: auto;
+}
+
+.read-page .nav-links a {
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.read-page .nav-links a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+    text-decoration: underline;
+   
+}
+
+.page-header {
+    text-align: center;
+    padding: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+  animation: fadeIn 1s ease-in-out 0.5s forwards;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: rgb(211, 209, 209);
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: rgba(129, 114, 114, 0.9);
+    text-align: center;
+}
+.BiggerContainer {
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+}
+        
+.Smallercontainer {
+    background: rgba(144, 238, 144, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+.Smallercontainer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.blog-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d2d2d;
+            margin-bottom: 0.5rem;
+            background: red;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            display: inline-block;
+}
+
+.blog-author {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    border-radius: 6px;
+}
+
+.author-name {
+    font-weight: 600;
+    color: #2d2d2d
+}
+
+
+.blog-subtitle {
+            font-size: 1rem;
+            color: #2d2d2d;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            display: inline-block;
+}
+
+.Smallercontainer .blog-subtitle p{
+    font-size: 1.1rem;
+    color: rgba(129, 114, 114, 0.9);
+    text-align: center;
+}
+
+
+.blog-subtitle p {
+    font-size: 1.1rem;
+    color: rgba(129, 114, 114, 0.9);
+    text-align: center;
+}
+
+.blog-preview {
+    color: #2d2d2d;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--white);
+}
+
+
+  
+.blog-date {
+            color: #666;
+            opacity: 0.8;
+            font-size: 0.7rem;
+            font-style: italic;
+}
+        
+.blog-tags {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 1rem;
+
+}
+
+.CommentSection {
+   background: transparent;
+   padding: 2rem;
+}
+
+.CommentContainer{
+ margin: 10%;
+ background: gray
+}
+
+.UsernameContainer{
+        font-size: 1rem;
+        margin:10%;
+        background: red;
+        opacity: 30%;
+        padding: 0.2rem 0.5rem;
+        border-radius: 6px;
+    display: inline-block;
+
+}
+
+.UsernameContainer h2 {
+ font-size: 0.9rem;
+ font-weight: bold;
+}
+
+.UsernameContainer p {
+ font-size: 0.5rem;
+ color: blueviolet;
+}
+
+.CommentContent{
+  font-size: 0.6rem;
+ padding: 4px 4px 4px 4px;
+}
+
+.CommentDate{
+ background-color: aqua;
+ font-size: xx-small;
+ text-decoration: dashed;
+}
+
+.blog-content:hover {
+    
+    opacity: 1;
+}
+
+
+.no-blogs {
+    background: rgba(255, 182, 193, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+        
+.no-blogs h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+}
+
+
+.no-blogs-card .btn {
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--white);
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 725px) {
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .BiggerContainer {
+        padding: 1rem;
+    }
+    
+    .Smallercontainer {
+        padding: 1.5rem;
+    }
+    
+    .read-page .nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .read-page .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

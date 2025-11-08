@@ -1,0 +1,153 @@
+.account-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.account-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.account-header h1 {
+    color: var(--accent);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.account-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+
+.info-card h3 {
+    color: var(--text);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--secondary);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    color: var(--text);
+}
+
+.info-value {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--primary);
+    color: var(--white);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.edit-section {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.edit-form {
+    display: none;
+}
+
+.edit-form.show {
+    display: block;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--secondary);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.btn-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.grade-indicator {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.grade-1 { background: #FFB4A2; color: white; }
+.grade-2 { background: #FFC0CB; color: white; }
+.grade-3 { background: #FFB6C1; color: white; }
+.grade-4 { background: #FFA0B4; color: white; }
+.grade-5 { background: #FF69B4; color: white; }
+.grade-6 { background: #E55A9B; color: white; }

@@ -1,0 +1,91 @@
+/* CbNoticias Landing Page Styles */
+/* ================================ */
+
+.landing-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px var(--shadow);
+}
+
+.welcome-section h1 {
+  color: var(--accent);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-section p {
+  color: var(--text);
+  font-size: 1.2rem;
+}
+
+.sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.section-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px var(--shadow);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.section-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--shadow);
+}
+
+.section-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.section-btn {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+}
+
+.user-info {
+  background: var(--primary);
+  color: var(--white);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.user-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.user-info p {
+  margin: 0.5rem 0 0 0;
+  opacity: 0.9;
+}
