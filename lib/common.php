@@ -15,7 +15,8 @@ function getDsn(){
 function getPDO()
 {
     $pdo = new PDO(getDsn());
-
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
     // Foreign key constraints need to be enabled manually in SQLite
     $result = $pdo->query('PRAGMA foreign_keys = ON');
     if ($result === false)
@@ -25,7 +26,6 @@ function getPDO()
 
     return $pdo;
 }
-
 
 function htmlEscape($html)
 {
@@ -59,7 +59,7 @@ function tryLogin(PDO $pdo, $usuario, $clave)
 {
     $sql = "
         SELECT
-            id_usr, usuario, nombre, email, clave, genero_lit
+            id_usr, usuario, nombre, email, clave, genero_lit_fav
         FROM
             user
         WHERE
@@ -70,7 +70,7 @@ function tryLogin(PDO $pdo, $usuario, $clave)
     
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    // Direct password comparison (plain text - no hashing)
+    // Direct password comparison (plain text - matching your system)
     if ($user && $user['clave'] === $clave) {
         return $user;
     }
@@ -81,22 +81,23 @@ function tryLogin(PDO $pdo, $usuario, $clave)
 /**
  * Log in a user by setting session variables
  */
-function login($usuario, $nombre, $genero_lit = null)
+function login($usuario, $nombre, $genero_lit_fav = null)
 {
     session_regenerate_id(true);
     $_SESSION['usuario'] = $usuario;
     $_SESSION['nombre'] = $nombre;
-    $_SESSION['genero_lit_fav'] = $genero_lit;
+    $_SESSION['genero_lit_fav'] = $genero_lit_fav ?? 'General';
     $_SESSION['logged_in'] = true;
 }
+
 /**
  * Check if user is logged in
  */
-
 function isLoggedIn()
 {
-    return isset($_SESSION['logged_in_username']);
+    return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 }
+
 /**
  * Require login - redirect if not logged in
  */
@@ -107,13 +108,9 @@ function requireLogin() {
     }
 }
 
-function fetchgenerolitfav(PDO $pdo, $usuario)
-{
-    $stmt = $pdo->prepare("SELECT genero_lit FROM user WHERE usuario = :usuario");
-    $stmt->execute([':usuario' => $usuario]);
-    return $stmt->fetchColumn();
-}
-
+/**
+ * Check if a user exists by username
+ */
 function userExists(PDO $pdo, $usuario)
 {
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE usuario = :usuario");
@@ -121,10 +118,13 @@ function userExists(PDO $pdo, $usuario)
     return $stmt->fetchColumn() > 0;
 }
 
-function emailExists(PDO $pdo, $correo)
+/**
+ * Check if an email exists - FIXED
+ */
+function emailExists(PDO $pdo, $email)
 {
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE correo = :correo");
-    $stmt->execute([':correo' => $correo]);
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE email = :email");
+    $stmt->execute([':email' => $email]);
     return $stmt->fetchColumn() > 0;
 }
 
@@ -145,12 +145,13 @@ function getCurrentUser()
     return isset($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
 }
 
+/**
+ * Fetch all users from database
+ */
 function fetchAllusuarios() {
     $pdo = getPDO();
-
-    // Prepare and execute the query
     $stmt = $pdo->prepare('
-        SELECT usuario, nombre, email, genero_lit
+        SELECT usuario, nombre, email, genero_lit_fav
         FROM user
         ORDER BY usuario ASC
     ');
@@ -159,10 +160,8 @@ function fetchAllusuarios() {
         throw new Exception('Failed to fetch users from database');
     }
 
-    // Return same kind of data that mysqli_stmt_get_result() provided
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
 
 /**
  * Fetch all posts from database
