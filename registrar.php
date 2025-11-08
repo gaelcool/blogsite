@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <option value="Romance" <?php echo (isset($_POST['genero_lit_fav']) && $_POST['genero_lit_fav'] === 'Romance') ? 'selected' : ''; ?>>Romance</option>
           <option value="Misterio" <?php echo (isset($_POST['genero_lit_fav']) && $_POST['genero_lit_fav'] === 'Misterio') ? 'selected' : ''; ?>>Misterio</option>
           <option value="Fantasía" <?php echo (isset($_POST['genero_lit_fav']) && $_POST['genero_lit_fav'] === 'Fantasía') ? 'selected' : ''; ?>>Fantasía</option>
-          <option value="Historia" <?php echo (isset($_POST['genero_lit_fav']) && $_POST['genero_lit_fav'] === 'Historia') ? 'selected' : ''; ?>>Historia</option>
+          <option value="Horror" <?php echo (isset($_POST['genero_lit_fav']) && $_POST['genero_lit_fav'] === 'Horror') ? 'selected' : ''; ?>>Horror</option>
           <option value="Biografía" <?php echo (isset($_POST['genero_lit_fav']) && $_POST['genero_lit_fav'] === 'Biografía') ? 'selected' : ''; ?>>Biografía</option>
           <option value="Poesía" <?php echo (isset($_POST['genero_lit_fav']) && $_POST['genero_lit_fav'] === 'Poesía') ? 'selected' : ''; ?>>Poesía</option>
           <option value="General" <?php echo (isset($_POST['genero_lit_fav']) && $_POST['genero_lit_fav'] === 'General') ? 'selected' : ''; ?>>General</option>
