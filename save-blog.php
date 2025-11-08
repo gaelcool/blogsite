@@ -1,19 +1,19 @@
 <?php
+require_once 'lib/common.php';
 session_start();
-include 'conexion.php';
 
 // Verificar que el usuario esté logueado
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.html");
+if (!isLoggedIn()) {
+    header("Location: login.php");
     exit;
 }
 
 // Recibir datos del formulario
-$titulo = trim($_POST["titulo"]);
-$subtitulo = trim($_POST["subtitulo"]);
-$contenido = trim($_POST["contenido"]);
-$tag = $_POST["tag"];
-$usuario_id = $_SESSION['id'];
+$titulo = trim($_POST["titulo"] ?? '');
+$subtitulo = trim($_POST["subtitulo"] ?? '');
+$contenido = trim($_POST["contenido"] ?? '');
+$tag = $_POST["tag"] ?? 'General';
+$autor = $_SESSION['usuario']; // Use username as author
 
 // Validaciones básicas
 if (empty($titulo) || empty($contenido)) {
@@ -44,22 +44,40 @@ if (strlen($contenido) < 50) {
 $palabras = str_word_count($contenido);
 $tiempo_lectura = ceil($palabras / 200); // 200 palabras por minuto
 
-// Insertar blog en la base de datos
-$stmt = mysqli_prepare($conexion, "INSERT INTO blogs (usuario_id, titulo, subtitulo, contenido, palabra_count, tiempo_lectura, tag) VALUES (?, ?, ?, ?, ?, ?, ?)");
-mysqli_stmt_bind_param($stmt, "isssiis", $usuario_id, $titulo, $subtitulo, $contenido, $palabras, $tiempo_lectura, $tag);
+try {
+    $pdo = getPDO();
+    
+    // Insertar blog en la base de datos
+    $stmt = $pdo->prepare("
+        INSERT INTO post (title, subtitle, author_name, content, tag, created_at) 
+        VALUES (:titulo, :subtitulo, :autor, :contenido, :tag, CURRENT_TIMESTAMP)
+    ");
+    
+    $result = $stmt->execute([
+        ':titulo' => $titulo,
+        ':subtitulo' => $subtitulo,
+        ':autor' => $autor,
+        ':contenido' => $contenido,
+        ':tag' => $tag
+    ]);
 
-if (mysqli_stmt_execute($stmt)) {
+    if ($result) {
+        echo '<script>
+        alert("¡Blog publicado exitosamente!");
+        window.location = "Read.php";
+        </script>';
+    } else {
+        echo '<script>
+        alert("Error al publicar el blog");
+        window.history.go(-1);
+        </script>';
+    }
+    
+} catch (PDOException $e) {
+    error_log("Error saving blog: " . $e->getMessage());
     echo '<script>
-    alert("¡Blog publicado exitosamente!");
-    window.location = "Read.html";
-    </script>';
-} else {
-    echo '<script>
-    alert("Error al publicar el blog: ' . mysqli_error($conexion) . '");
+    alert("Error al publicar el blog: ' . htmlspecialchars($e->getMessage()) . '");
     window.history.go(-1);
     </script>';
 }
-
-mysqli_stmt_close($stmt);
-mysqli_close($conexion);
 ?>
