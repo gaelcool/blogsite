@@ -24,8 +24,8 @@ if (!isset($_SESSION['usuario'])) {
         </div>
         <div class="nav-links">
             <a href="LP.php">Inicio</a>
-            <a href="Read.html">Leer Blogs</a>
-            <a href="Write.html">Escribir</a>
+            <a href="Read.php">Leer Blogs</a>
+            <a href="Write.php">Escribir</a>
             <a href="Account-info.php">Mi Cuenta</a>
             <a href="logout.php">Cerrar Sesión</a>
         </div>
@@ -62,6 +62,15 @@ if (!isset($_SESSION['usuario'])) {
                 </p>
                 <a href="Read.php" class="section-btn btn">Explorar Blogs</a>
             </div>
+              <div class="section-card">
+                <div class="section-icon"><h1>!</h1></div>
+                <h3 class="section-title">Descubre lo ilimitable</h3>
+                <p class="section-description">
+                   Otros foros// bajo construcción
+                </p>
+                <a href="Write.php" class="" aria-disabled="true">...</a>
+            </div>
+
         </div>
     </div>
 
