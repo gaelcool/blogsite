@@ -40,22 +40,30 @@ function installDatabase()
     // Execute SQL commands
     if (!$error)
     {
-        $pdo = getPDO();
-        $result = $pdo->exec($sql);
-        if ($result === false)
-        {
-            $error = 'No se pudo ejecutar SQL: ' . print_r($pdo->errorInfo(), true);
+        try {
+            $pdo = getPDO();
+            $result = $pdo->exec($sql);
+            if ($result === false)
+            {
+                $error = 'No se pudo ejecutar SQL: ' . print_r($pdo->errorInfo(), true);
+            }
+        } catch (Exception $e) {
+            $error = 'Error al ejecutar SQL: ' . $e->getMessage();
         }
     }
     
     // Count created users
     if (!$error)
     {
-        $sql = "SELECT COUNT(*) AS c FROM usuarios";
-        $stmt = $pdo->query($sql);
-        if ($stmt)
-        {
-            $count = $stmt->fetchColumn();
+        try {
+            $sql = "SELECT COUNT(*) AS c FROM user";
+            $stmt = $pdo->query($sql);
+            if ($stmt)
+            {
+                $count = $stmt->fetchColumn();
+            }
+        } catch (Exception $e) {
+            $error = 'Error al contar usuarios: ' . $e->getMessage();
         }
     }
     
@@ -65,14 +73,14 @@ function installDatabase()
 session_start();
 
 // Process installation when form is submitted
-// if ($_SERVER['REQUEST_METHOD'] === 'POST')
-// {
-//     list($_SESSION['count'], $_SESSION['error']) = installDatabase();
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
+    list($_SESSION['count'], $_SESSION['error']) = installDatabase();
     
-//     // Redirect to same page to prevent resubmission
-//     header('Location: ' . $_SERVER['REQUEST_URI']);
-//     exit();
-// }
+    // Redirect to same page to prevent resubmission
+    header('Location: ' . $_SERVER['REQUEST_URI']);
+    exit();
+}
 
 // Check if we just completed an installation
 $attempted = false;
@@ -92,11 +100,11 @@ if (isset($_SESSION['count']) || isset($_SESSION['error']))
 
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instalador - cbnoticias</title>
+    <title>Instalador - CbNoticias</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -142,7 +150,7 @@ if (isset($_SESSION['count']) || isset($_SESSION['error']))
     </style>
 </head>
 <body>
-    <h1> :> Instalador de Base de Datos - Cbnoticias :< </h1>
+    <h1>📰 Instalador de Base de Datos - CbNoticias</h1>
     
     <?php if ($attempted): ?>
         <?php if ($error): ?>
@@ -159,8 +167,9 @@ if (isset($_SESSION['count']) || isset($_SESSION['error']))
                     • <code>Jimmy</code> / password: <code>password123</code>
                 </p>
                 <p>
-                    <a href="register.php">Ir al registro</a> | 
-                    <a href="index.html">Ir al inicio</a>
+                    <a href="registrar.php">Ir al registro</a> | 
+                    <a href="index.html">Ir al inicio</a> |
+                    <a href="login.php">Iniciar sesión</a>
                 </p>
             </div>
         <?php endif ?>

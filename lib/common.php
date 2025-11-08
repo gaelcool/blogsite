@@ -42,15 +42,44 @@ function convertSqlDate($sqlDate)
     return $date->format('d/m/Y');
 }
 
-//  Log in a user by setting session variables
- 
-// function login($usuario, $nombre)
-// {
-//     session_regenerate_id(true);
-//     $_SESSION['usuario'] = $usuario;
-//     $_SESSION['nombre'] = $nombre;
-//     $_SESSION['logged_in'] = true;
-// }
+/**
+ * Try to login a user
+ * @return array|false Returns user data or false on failure
+ */
+function tryLogin(PDO $pdo, $usuario, $clave)
+{
+    $sql = "
+        SELECT
+            id_usr, usuario, nombre, email, clave, genero_lit
+        FROM
+            user
+        WHERE
+            usuario = :usuario
+    ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['usuario' => $usuario]);
+    
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Direct password comparison (not hashed in your init.sql)
+    if ($user && $user['clave'] === $clave) {
+        return $user;
+    }
+    
+    return false;
+}
+
+/**
+ * Log in a user by setting session variables
+ */
+function login($usuario, $nombre, $genero_lit = null)
+{
+    session_regenerate_id(true);
+    $_SESSION['usuario'] = $usuario;
+    $_SESSION['nombre'] = $nombre;
+    $_SESSION['genero_lit_fav'] = $genero_lit;
+    $_SESSION['logged_in'] = true;
+}
 
 /**
  * Check if user is logged in
@@ -59,6 +88,10 @@ function isLoggedIn()
 {
     return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 }
+
+/**
+ * Require login - redirect if not logged in
+ */
 function requireLogin() {
     if (!isLoggedIn()) {
         header('Location: login.php');
@@ -66,6 +99,28 @@ function requireLogin() {
     }
 }
 
+function userExists(PDO $pdo, $usuario)
+{
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE usuario = :usuario");
+    $stmt->execute([':usuario' => $usuario]);
+    return $stmt->fetchColumn() > 0;
+}
+
+function emailExists(PDO $pdo, $correo)
+{
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE correo = :correo");
+    $stmt->execute([':correo' => $correo]);
+    return $stmt->fetchColumn() > 0;
+}
+
+/**
+ * Log out current user
+ */
+function logout()
+{
+    session_unset();
+    session_destroy();
+}
 
 /**
  * Get current logged in user's username
@@ -76,29 +131,12 @@ function getCurrentUser()
 }
 
 /**
- * Check if a user exists by username
+ * Fetch all posts from database
  */
-function userExists(PDO $pdo, $usuario)
-{
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE usuario = :usuario");
-    $stmt->execute([':usuario' => $usuario]);
-    return $stmt->fetchColumn() > 0;
-}
-
-/**
- * Check if an email exists
- */
-function emailExists(PDO $pdo, $correo)
-{
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE correo = :correo");
-    $stmt->execute([':correo' => $correo]);
-    return $stmt->fetchColumn() > 0;
-}
-
 function fetchAllPosts() {
     $pdo = getPDO();
     $query = $pdo->query('
-        SELECT title, subtitle, author_name, content, created_at
+        SELECT title, subtitle, author_name, content, created_at, tag
         FROM post
         ORDER BY created_at DESC
     ');
@@ -110,10 +148,13 @@ function fetchAllPosts() {
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
+/**
+ * Fetch all comments from database
+ */
 function fetchAllComments() {  
     $pdo = getPDO();
     $query = $pdo->query('
-        SELECT user_id_C, text, created_at
+        SELECT user_id_C, text, created_at, grade
         FROM comment
         ORDER BY created_at DESC
     ');

@@ -13,21 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     $clave = $_POST['clave'];
     
     try {
-        // Query to find user
-        $stmt = $pdo->prepare('SELECT usuario, nombre FROM user WHERE usuario = :usuario AND clave = :clave');
-        $stmt->execute([
-            'usuario' => $usuario,
-            'clave' => $clave
-        ]);
-        
-        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Try to login
+        $userData = tryLogin($pdo, $usuario, $clave);
         
         if ($userData)
         {
-            // Login successful - set session variables
-            $_SESSION['usuario'] = $userData['usuario'];
-            $_SESSION['nombre'] = $userData['nombre'];
-            $_SESSION['logged_in'] = true;
+            // Login successful
+            login($userData['usuario'], $userData['nombre'], $userData['genero_lit']);
             
             header('Location: LP.php');
             exit();
@@ -36,10 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         {
             $error = 'Usuario o contraseña incorrectos';
         }
-    }
-    catch (Exception $e)
-    {
-        $error = 'Error al procesar el login: ' . $e->getMessage();
+    } catch (Exception $e) {
+        $error = 'Error en el sistema: ' . $e->getMessage();
     }
 }
 ?>
@@ -62,10 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         </div>
       <?php endif; ?>
       
-      <input type="text" name="usuario" placeholder="Usuario" required autocomplete="username">
-      <input type="password" name="clave" placeholder="Contraseña" required autocomplete="current-password">
+      <input type="text" name="usuario" placeholder="Usuario" required 
+             value="<?php echo isset($usuario) ? htmlEscape($usuario) : ''; ?>">
+      <input type="password" name="clave" placeholder="Contraseña" required>
       <button type="submit">Entrar</button>
       <p>¿No tienes cuenta? <a href="register.html">Regístrate</a></p>
+      <p><a href="install.php">Instalar base de datos</a></p>
     </form>
   </div>
 </body>

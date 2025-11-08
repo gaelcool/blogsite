@@ -1,14 +1,7 @@
 <?php
+require_once'lib/common.php';
 session_start();
-include 'conexion.php';
-// Verificar sesión con manejo de errores
-if (!isset($_SESSION['usuario']) || !isset($_SESSION['id'])) {
-    header("Location: LP.php");
-    exit;
-}
 
-
-// Verificar que el usuario existe
 
 $verificar_usuario = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario = '$usuario' AND clave = '$clave'");
 
@@ -24,7 +17,7 @@ $usuario_data = mysqli_fetch_assoc($resultado);
 $resultado = mysqli_query($conexion,"$usuario_data");
 
 // Obtener estadísticas del usuario
-$stmt = mysqli_prepare($conexion, "SELECT COUNT(*) as total_blogs, AVG(palabra_count) as avg_words FROM blogs WHERE usuario_id = ?");
+$stmt = mysqli_prepare($conexion, "SELECT COUNT(*) as total_blogs, AVG(palabra_count) as avg_words FROM post WHERE usuario_id = ?");
 mysqli_stmt_bind_param($stmt, "i", $_SESSION['id']);
 mysqli_stmt_execute($stmt);
 $stats_result = mysqli_stmt_get_result($stmt);
@@ -37,9 +30,9 @@ $hoy = new DateTime();
 $dias_registrado = $hoy->diff($fecha_registro)->days;
 
 // Calcular nivel de escritor
-$grade = min(6, max(1, floor($stats['total_blogs'] / 2) + 1));
+// $grade = min(6, max(1, floor($stats['total_blogs'] / 2) + 1));
 
-mysqli_close($conexion);
+// mysqli_close($conexion);
 ?>
 
 <!DOCTYPE html>
