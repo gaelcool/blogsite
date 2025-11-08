@@ -50,10 +50,10 @@ body {
 header {
     background: repeating-linear-gradient(
         45deg,
-        #6b7c4a,
-        #6b7c4a 20px,
-        #4a5c3a 20px,
-        #4a5c3a 40px
+        #404556,
+        #404556 20px,
+        #60515C 20px,
+        #60515C 40px
     );
     padding: 20px;
     display: flex;
@@ -63,8 +63,9 @@ header {
 }
 
 .logo h1 {
-    color: peachpuff;
+    color: #b51179;
     font-size: 28px;
+    font-style: italic;
 }
 
 nav {

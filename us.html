@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sobre Nosotros - Zoolandia</title>
+    <title>Sobre Nosotros - CbNoticias</title>
      
       <link rel="stylesheet" href="us.css">
 </head>
@@ -11,19 +11,27 @@
     <div class="wrapper">
         <header>
             <div class="logo">
-                <h1>ZOOLANDIA</h1>
+                <h1>CbNoticias</h1>
             </div>
             <nav>
                 <a href="index.html">Inicio</a>
                 <a href="us.html" class="active">Sobre Nosotros</a>
                 <a href="register.php">Registro</a>
             </nav>
+            <form action="login.php" method="POST" class="form" id="loginForm">
+            <div class="login">
+                  <input type="text" name="usuario" placeholder="Usuario" >
+            
+      <input type="password" name="clave" placeholder="Contraseña" >
+      <button type="submit" id="submitBtn">Entrar</button>
+            </div>
+            </form>
         </header>
 
         <main class="container">
             <section class="intro">
                 <h2>Sobre Nosotros</h2>
-                <p>Zoolandia es el mero santuario dedicado a la conservación y aprecio de animalitos desde 2028.</p>
+                <p>Cbnoticias busca fomentar comunicacion estudiantil.</p>
             </section>
 
             <section class="location">
