@@ -1,3 +1,43 @@
+<?php
+require_once 'lib/common.php';
+session_start();
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'get')
+{
+    $pdo = getPDO();
+    
+    // Get credentials
+    $usuario = trim($_GET['user']);
+    $clave = $_POST['clave'];
+    
+    try {
+        // Try to login
+        $userData = tryLogin($pdo, $usuario, $clave);
+        
+        if ($userData)
+        {
+            // Login successful
+            login($userData['user'], $userData['nombre'], $userData['genero_lit_fav']);
+            
+            header('Location: LP.php');
+            exit();
+        }
+        else
+        {
+            $error = 'Usuario o contraseña incorrectos';
+        }
+    } catch (Exception $e) {
+        $error = 'Error en el sistema: ' . $e->getMessage();
+    }
+}
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

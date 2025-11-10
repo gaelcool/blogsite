@@ -4,7 +4,7 @@ session_start();
 
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST')
+if ($_SERVER['REQUEST_METHOD'] === 'user')
 {
     $pdo = getPDO();
     
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         {
             // Login successful
             login($userData['usuario'], $userData['nombre'], $userData['genero_lit_fav']);
-            
+              
             header('Location: LP.php');
             exit();
         }
