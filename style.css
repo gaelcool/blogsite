@@ -54,6 +54,7 @@ body {
   color: var(--accent);
   margin-bottom: 1rem;
   font-family: 'Arial', sans-serif;
+  animation: fromdown 1s ease-in-out;
 }
 
 
@@ -70,7 +71,7 @@ body {
   padding: 15px 30px;
   margin-bottom: 2rem;
   opacity: 1;
-  animation: fadeIn 1s ease-in-out 1s forwards;
+  animation: fadeIn 1s ease-in-out 0.5s forwards;
   transition: all 0.3s ease;
   cursor: none;
 }
@@ -174,7 +175,6 @@ button, .btn {
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
-  transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
   text-align: center;
@@ -242,6 +242,17 @@ button:disabled, .btn:disabled {
     100% {
         text-shadow: 0 0 5px rgba(255, 255, 255, 0);
     }
+}
+
+@keyframes fromdown{ 
+  from{
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(20px);
+  }
 }
 
 /* Form Styles (Currently Used) */
