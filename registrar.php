@@ -8,7 +8,7 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdo = getPDO();
     
-    // Get and sanitize input
+    
     $nombre = trim($_POST["nombre"] ?? '');
     $email = trim($_POST["correo"] ?? '');
     $usuario = trim($_POST["usuario"] ?? '');

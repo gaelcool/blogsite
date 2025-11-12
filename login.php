@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     $clave = $_POST['clave'];
     
     try {
-        // Try to login
-        $userData = tryLogin($pdo, $usuario, $clave);
+      
+        $userData = intentaLogin($pdo, $usuario, $clave);
         
         if ($userData)
         {

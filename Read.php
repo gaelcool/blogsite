@@ -1,7 +1,7 @@
 <?php
 require_once 'lib/common.php';
 session_start();
-requireLogin();
+requiereLogin();
 
 // Fetch all posts from database
 $blogs = fetchAllPosts();
@@ -288,7 +288,7 @@ unset($blog); // Break reference
                         
                         <div class="blog-meta">
                             <span class="blog-author">👤 <?php echo htmlEscape($blog['autor']); ?></span>
-                            <span class="blog-date">📅 <?php echo convertSqlDate($blog['fecha_creacion']); ?></span>
+                            <span class="blog-date">📅 <?php echo TraduceSQLfecha($blog['fecha_creacion']); ?></span>
                         </div>
                         
                         <div class="blog-stats">

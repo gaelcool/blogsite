@@ -32,7 +32,7 @@ function htmlEscape($html)
     return htmlspecialchars($html, ENT_HTML5, 'UTF-8');
 }
 
-function convertSqlDate($sqlDate)
+function TraduceSQLfecha($sqlDate)
 {
     if (empty($sqlDate)) {
         return 'Unknown date';
@@ -51,11 +51,8 @@ function convertSqlDate($sqlDate)
     return $date->format('d/m/Y');
 }
 
-/**
- * Try to login a user
- * @return array|false Returns user data or false on failure
- */
-function tryLogin(PDO $pdo, $usuario, $clave)
+
+function intentaLogin(PDO $pdo, $usuario, $clave)
 {
     $sql = "
         SELECT
@@ -78,9 +75,7 @@ function tryLogin(PDO $pdo, $usuario, $clave)
     return false;
 }
 
-/**
 
- */
 function login($usuario, $nombre, $genero_lit_fav = null)
 {
     session_regenerate_id(true);
@@ -90,9 +85,7 @@ function login($usuario, $nombre, $genero_lit_fav = null)
     $_SESSION['logged_in'] = true;
 }
 
-/**
- * Check if user is logged in
- */
+
 function isLoggedIn()
 {
     return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
@@ -101,16 +94,14 @@ function isLoggedIn()
 /**
  * Require login - redirect if not logged in
  */
-function requireLogin() {
+function requiereLogin() {
     if (!isLoggedIn()) {
         header('Location: login.php');
         exit();
     }
 }
 
-/**
- * Check if a user exists by username
- */
+
 function userExists(PDO $pdo, $usuario)
 {
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE usuario = :usuario");
@@ -119,7 +110,7 @@ function userExists(PDO $pdo, $usuario)
 }
 
 /**
- * Check if an email exists - FIXED
+ * Check if an email exists - FIXED :)
  */
 function emailExists(PDO $pdo, $email)
 {
@@ -128,9 +119,7 @@ function emailExists(PDO $pdo, $email)
     return $stmt->fetchColumn() > 0;
 }
 
-/**
- * Log out current user
- */
+
 function logout()
 {
     session_unset();
@@ -138,15 +127,15 @@ function logout()
 }
 
 /**
- * Get current logged in user's username
+ * Get current usuarios username 
  */
-function getCurrentUser()
+function getCurrentUsername()
 {
     return isset($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
 }
 
 /**
- * Fetch all users from database
+ * Fetch TODOS los usuarios del db
  */
 function fetchAllusuarios() {
     $pdo = getPDO();
@@ -163,9 +152,7 @@ function fetchAllusuarios() {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-/**
- * Fetch all posts from database
- */
+
 function fetchAllPosts() {
     $pdo = getPDO();
     $query = $pdo->query('
@@ -182,7 +169,7 @@ function fetchAllPosts() {
 }
 
 /**
- * Fetch all comments from database
+ * Fetch all commentarios de la db
  */
 function fetchAllComments() {  
     $pdo = getPDO();

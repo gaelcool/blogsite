@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'get')
     
     try {
         // Try to login
-        $userData = tryLogin($pdo, $usuario, $clave);
+        $userData = intentaLogin($pdo, $usuario, $clave);
         
         if ($userData)
         {

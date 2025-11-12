@@ -1,16 +1,20 @@
-// Validation Box System for CbNoticias Registration
+// Sistema de Validación para Registro de CbNoticias
 document.addEventListener('DOMContentLoaded', function() {
-  // Validation patterns
-  const patterns = {
-    nombre: /^[a-záéíóúñA-ZÁÉÍÓÚÑ\s]+$/i,
+
+  const formulario = document.getElementById('registerForm');
+  const botonEnviar = document.getElementById('submitBtn');
+  const camposTexto = ['nombre', 'correo', 'usuario', 'clave', 'telefono'];
+
+  const patrones = {
+    nombre: /^[a-záéíóúñA-ZÁÉÍÓÚÑ\s]+$/,
     correo: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     usuario: /^[a-zA-Z0-9_]{3,20}$/,
     clave: /^.{6,}$/,
     telefono: /^[0-9]{10}$/
   };
 
-  // Help messages (only for text fields)
-  const messages = {
+  // Mensajes de ayuda
+  const mensajes = {
     nombre: 'Solo letras y espacios',
     correo: 'usuario@cbtis03.edu',
     usuario: '3-20 caracteres (letras, números, guiones bajos)',
@@ -18,152 +22,123 @@ document.addEventListener('DOMContentLoaded', function() {
     telefono: '10 dígitos (opcional)'
   };
 
-  // Field validation state
-  const validState = {
-    nombre: false,
-    correo: false,
+  // Estado de validación de campos
+  const estadoValido = {
+    nombre: true,
+    correo: true,
     usuario: false,
     clave: false,
     telefono: true 
   };
 
-  // Get elements
-  const form = document.getElementById('registerForm');
-  const submitBtn = document.getElementById('submitBtn');
   
-  // Only text input fields that need validation
-  const textFields = ['nombre', 'correo', 'usuario', 'clave', 'telefono'];
 
-  /**
-   * Update submit button state
-   */
-  function updateSubmitButton() {
-    const allValid = Object.values(validState).every(Boolean);
-    submitBtn.disabled = !allValid;
+  function actualizarBotonEnviar() {
+    const todosValidos = Object.values(estadoValido).every(Boolean);
+    botonEnviar.disabled = !todosValidos;
   }
 
-  /**
-   * Show help text in validation box (only for text fields)
-   */
-  function showHelpText(fieldId) {
-    const msgElement = document.getElementById(fieldId + 'Msg');
-    if (msgElement && messages[fieldId]) {
-      msgElement.textContent = messages[fieldId];
-      msgElement.className = 'validation-box show neutral';
+  function mostrarAyuda(campoId) {
+    const elementoMsg = document.getElementById(campoId + 'Msg');
+    if (elementoMsg && mensajes[campoId]) {
+      elementoMsg.textContent = mensajes[campoId];
+      elementoMsg.className = 'validation-box show neutral';
     }
   }
 
-  /**
-   * Hide validation box
-   */
-  function hideValidationBox(fieldId) {
-    const msgElement = document.getElementById(fieldId + 'Msg');
-    if (msgElement) {
-      msgElement.className = 'validation-box';
-      msgElement.textContent = '';
+  function ocultarValidacion(campoId) {
+    const elementoMsg = document.getElementById(campoId + 'Msg');
+    if (elementoMsg) {
+      elementoMsg.className = 'validation-box';
+      elementoMsg.textContent = '';
     }
   }
 
-  /**
-   * Validate text field and update UI
-   */
-  function validateField(fieldId) {
-    const field = document.getElementById(fieldId);
-    if (!field) return false;
+  function validarCampo(campoId) {
+    const campo = document.getElementById(campoId);
+    if (!campo) return false;
     
-    const msgElement = document.getElementById(fieldId + 'Msg');
-    const value = field.value.trim();
+    const elementoMsg = document.getElementById(campoId + 'Msg');
+    const valor = campo.value.trim();
     
-    // Empty field handling
-    if (value === '') {
-      // Telefono is optional
-      if (fieldId === 'telefono') {
-        hideValidationBox(fieldId);
-        validState[fieldId] = true;
-        field.className = '';
-        updateSubmitButton();
+    // Manejar campos vacío
+    if (valor === '') {
+      // El teléfono es opcional
+      if (campoId === 'telefono') {
+        ocultarValidacion(campoId);
+        estadoValido[campoId] = true;
+        campo.className = '';
+        actualizarBotonEnviar();
         return true;
       } else {
-        hideValidationBox(fieldId);
-        validState[fieldId] = false;
-        field.className = '';
-        updateSubmitButton();
+        ocultarValidacion(campoId);
+        estadoValido[campoId] = false;
+        campo.className = '';
+        actualizarBotonEnviar();
         return false;
       }
     }
     
-    // Validate against pattern
-const isValid = patterns[fieldId].test(value);
-    validState[fieldId] = isValid;
+    // Validar contra patrón
+    const esValido = patrones[campoId].test(valor);
+    estadoValido[campoId] = esValido;
     
-    if (isValid) {
-      msgElement.textContent = ' ' + messages[fieldId];
-      msgElement.className = 'validation-box show valid';
-      field.className = 'success';
+    if (esValido) {
+      elementoMsg.textContent = '✓ ' + mensajes[campoId];
+      elementoMsg.className = 'validation-box show valid';
+      campo.className = 'success';
     } else {
-      msgElement.textContent = ' ' + messages[fieldId];
-      msgElement.className = 'validation-box show invalid';
-      field.className = 'error';
+      elementoMsg.textContent = '✗ ' + mensajes[campoId];
+      elementoMsg.className = 'validation-box show invalid';
+      campo.className = 'error';
     }
     
-    updateSubmitButton();
-    return isValid;
+    actualizarBotonEnviar();
+    return esValido;
   }
 
-  /**
-   * Set up event listeners for text fields
-   */
-  textFields.forEach(fieldId => {
-    const field = document.getElementById(fieldId);
-    if (!field) return;
+  // Configurar escuchadores de eventos
+  camposTexto.forEach(campoId => {
+    const campo = document.getElementById(campoId);
+    if (!campo) return;
     
-    // Focus event - show help text
-    field.addEventListener('focus', function() {
-      showHelpText(fieldId);
-    });
+    // Al enfocar - mostrar ayuda
+    campo.addEventListener('focus', () => mostrarAyuda(campoId));
     
-    // Blur event - hide if empty, otherwise validate
-    field.addEventListener('blur', function() {
-      if (this.value.trim() === '' && fieldId !== 'telefono') {
-        hideValidationBox(fieldId);
-        validState[fieldId] = false;
-        updateSubmitButton();
+    campo.addEventListener('blur', function() {
+      if (this.value.trim() === '' && campoId !== 'telefono') {
+        ocultarValidacion(campoId);
+        estadoValido[campoId] = false;
+        actualizarBotonEnviar();
       } else {
-        validateField(fieldId);
+        validarCampo(campoId);
       }
     });
     
-    // Input event - real-time validation
-    field.addEventListener('input', function() {
-      // Special handling for telefono (numbers only)
-      if (fieldId === 'telefono') {
+    campo.addEventListener('input', function() {
+      if (campoId === 'telefono') {
         this.value = this.value.replace(/\D/g, '').substring(0, 10);
       }
-      
-      validateField(fieldId);
+      validarCampo(campoId);
     });
   });
 
-  /**
-   * Form submission validation
-   */
-  form.addEventListener('submit', function(e) {
-    // Validate all text fields one more time
-    let allValid = true;
+  formulario.addEventListener('submit', function(e) {
+    let todosValidos = true;
     
-    textFields.forEach(fieldId => {
-      if (!validateField(fieldId) && fieldId !== 'telefono') {
-        allValid = false;
+  
+    camposTexto.forEach(campoId => {
+      if (!validarCampo(campoId) && campoId !== 'telefono') {
+        todosValidos = false;
       }
     });
     
-    if (!allValid) {
+    if (!todosValidos) {
       e.preventDefault();
       alert('Por favor completa todos los campos correctamente.');
       return false;
     }
   });
 
-  // Initialize submit button as disabled
-  updateSubmitButton();
+  actualizarBotonEnviar();
 });

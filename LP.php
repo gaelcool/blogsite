@@ -1,7 +1,7 @@
 <?php
 require_once'lib/common.php';
 session_start();
-requireLogin();
+requiereLogin();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.html");
