@@ -3,7 +3,7 @@ require_once 'lib/common.php';
 session_start();
 requiereLogin();
 
-// Fetch all posts from database
+
 $blogs = fetchAllPosts();
 
 // Calculate word count and reading time for each blog
@@ -12,15 +12,14 @@ foreach ($blogs as &$blog) {
     $blog['palabra_count'] = $wordCount;
     $blog['tiempo_lectura'] = max(1, ceil($wordCount / 200)); // Assuming 200 words per minute
     
-    // Map database columns to expected names
     $blog['titulo'] = $blog['title'];
     $blog['subtitulo'] = $blog['subtitle'];
     $blog['contenido'] = $blog['content'];
     $blog['autor'] = $blog['author_name'];
     $blog['fecha_creacion'] = $blog['created_at'];
-    $blog['id'] = md5($blog['title'] . $blog['created_at']); // Generate unique ID
+    $blog['id'] = md5($blog['title'] . $blog['created_at']); // 
 }
-unset($blog); // Break reference
+unset($blog); // deshacer
 
 ?>
 <!DOCTYPE html>
