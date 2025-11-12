@@ -175,8 +175,8 @@ if (isset($_SESSION['count']) || isset($_SESSION['error']))
         <?php endif ?>
     <?php else: ?>
         <div class="box" style="background: white; border: 2px solid #007bff;">
-            <p>Este instalador creará la base de datos SQLite con usuarios de prueba.</p>
-            <p><strong>⚠️ Esto es solo para desarrollo.</strong></p>
+            <p>Este instalador creará la base de datos SQLite con usuarios, comentarios y blogs de prueba.</p>
+            <p><strong>|⚠️ Esto es solo para desarrolladores.⚠️|</strong></p>
             <form method="post">
                 <button type="submit" name="install">Instalar Base de Datos</button>
             </form>

@@ -103,7 +103,7 @@ nav {
 }
 
 nav a {
-    color: #fff;
+    color: #FFC0CB;
     text-decoration: none;
     padding: 12px 18px;
     background:transparent;
@@ -167,7 +167,7 @@ section {
 }
 
 h2, h3, h4 {
-    color: #FFC0CB;
+    color: #FFF5F7;
     margin-bottom: 15px;
     text-align: center;
 }

@@ -79,7 +79,7 @@ function tryLogin(PDO $pdo, $usuario, $clave)
 }
 
 /**
- * Log in a user by setting session variables
+
  */
 function login($usuario, $nombre, $genero_lit_fav = null)
 {

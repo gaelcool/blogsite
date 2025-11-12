@@ -75,17 +75,18 @@ unset($blog); // Break reference
         }
         
         .blog-title {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             color: var(--text, #333);
             margin-bottom: 0.5rem;
         }
         
         .blog-subtitle {
-            font-size: 1rem;
+
+            font-size: 1.5rem;
             color: var(--text, #666);
             opacity: 0.8;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         
         .blog-meta {
