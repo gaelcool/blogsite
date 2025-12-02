@@ -14,8 +14,7 @@
     </div>
 </div>
     
-
- >lines 91 onward:
+ornah
    <h2 class="comments-header">
                 <?php if ($selectedPostId): ?>
                     Comments (<?php echo count($comments); ?>)
